@@ -422,42 +422,51 @@ function App() {
 							console.error("Map error:", evt);
 						}}
 						onMouseLeave={(event: MapLayerMouseEvent) => {
-							if (event.features && event.features[0] !== undefined) {
-								const feature = event.features[0];
-								mapRef.current?.getMap().removeFeatureState({
-									source: feature.source,
-									sourceLayer: feature.sourceLayer,
-								});
+							if (event.features?.length) {
+								// const feature = event.features[0];
+								for (const feat of event.features) {
+									mapRef.current?.getMap().removeFeatureState({
+										source: feat.source,
+										sourceLayer: feat.sourceLayer,
+									});
+								}
 							}
 						}}
 						onMouseMove={(event: MapLayerMouseEvent) => {
-							const feature = event.features?.[0];
-							if (feature) {
-								setCursor("pointer");
-								if (feature.id) {
-									const m = mapRef.current?.getMap();
-									m?.removeFeatureState({
-										source: feature.source,
-										sourceLayer: feature.sourceLayer,
-									});
-									m.setFeatureState(feature, { hover: true });
+							// const feature = event.features?.[0];
+							let markup = "";
+							if (event.features?.length) {
+								for (const feat of event.features || []) {
+									setCursor("pointer");
+									if (feat.id) {
+										const m = mapRef.current?.getMap();
+										m?.removeFeatureState({
+											source: feat.source,
+											sourceLayer: feat.sourceLayer,
+										});
+										m?.setFeatureState(feat, { hover: true });
+										markup +=
+											feat.properties.name ||
+											Object.entries(
+												feat.properties.tags_json
+													? JSON.parse(feat.properties.tags_json)
+													: feat.properties,
+											)
+												.map(
+													([k, v]) =>
+														`<tr><th style="text-align: left; padding: 2px;">${k}</th><td>${v}</td></tr>`,
+												)
+												.join("") +
+												(event.features?.length > 1
+													? '<tr style="border: 1px solid black;"></tr>'
+													: "");
+									}
 								}
 
 								setHoverInfo({
 									longitude: event.lngLat.lng,
 									latitude: event.lngLat.lat,
-									info:
-										feature.properties.name ||
-										Object.entries(
-											feature.properties.tags_json
-												? JSON.parse(feature.properties.tags_json)
-												: feature.properties,
-										)
-											.map(
-												([k, v]) =>
-													`<tr><th style="text-align: left; padding: 2px;">${k}</th><td>${v}</td></tr>`,
-											)
-											.join(""),
+									info: markup,
 								});
 							} else {
 								setHoverInfo(null);
