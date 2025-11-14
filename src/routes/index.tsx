@@ -388,8 +388,15 @@ function App() {
 	return (
 		<div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
 			<section className="py-16 px-6 mx-auto text-gray-200 text-center">
-				<div>
+				<div className="flex flex-col justify-center items-center">
 					<h3>TTE Maplibre Demo</h3>
+					<p className="text-xs text-left w-3xl">
+						Pan and zoom around on the map to dynamically aggregate LMP
+						observations to H3 Hexagons. The color is driven by the the average
+						of the price of the LMP observations within the cell, while the
+						extrusion height is driven by the count of observations used to
+						calculate the average.
+					</p>
 				</div>
 			</section>
 			<section className="px-6 max-w-7xl mx-auto">
