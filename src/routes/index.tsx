@@ -222,7 +222,7 @@ function useH3LMPAggregation(
 							80,
 							"#08519c",
 						],
-						"fill-extrusion-opacity": 0.6,
+						"fill-extrusion-opacity": 0.8,
 						"fill-extrusion-height": [
 							"interpolate",
 							["linear"],
@@ -272,7 +272,7 @@ function useH3LMPAggregation(
 					},
 				});
 				m.moveLayer("h3-line", "out");
-				m.moveLayer("h3", "h3-line");
+				// m.moveLayer("h3", "h3-line");
 			}
 		};
 
